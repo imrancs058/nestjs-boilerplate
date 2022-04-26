@@ -7,7 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigrationModule } from './configration/configration.module';
 import { ConfigrationService } from './configration/configration.service';
 import { LoggerModule } from './logger/logger.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [UserModule, ConfigrationModule,
     ConfigModule.forRoot({
@@ -22,7 +22,8 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigrationService],
     }),
     LoggerModule,
-    AuthModule,],
+    AuthModule,
+    ],
   controllers: [AppController],
   providers: [AppService],
 })
