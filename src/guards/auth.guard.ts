@@ -1,14 +1,22 @@
-import type { IAuthGuard, Type } from '@nestjs/passport';
-import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
-
-export function AuthGuard(
-  options?: Partial<{ public: boolean }>,
-): Type<IAuthGuard> {
-  const strategies = ['jwt'];
-
-  if (options?.public) {
-    strategies.push('public');
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { AuthGuard, IAuthGuard, Type } from '@nestjs/passport';
+// import { IS_PUBLIC_KEY } from 'src/decorators';
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  constructor(private reflector: Reflector) {
+    super();
   }
 
-  return NestAuthGuard(strategies);
+  canActivate(context: ExecutionContext) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+    return super.canActivate(context);
+  }
 }
+

@@ -1,7 +1,8 @@
  import { Body, Controller, Get, HttpCode, HttpStatus, Post, Version } from '@nestjs/common';
  import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Action } from '../../casl/userRoles';
 import { RoleType } from '../../constants';
-import { Auth, AuthUser } from '../../decorators';
+import { Auth, AuthUser, Public } from '../../decorators';
 import { User } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
@@ -14,6 +15,7 @@ export class AuthController {
         private authService: AuthService,
       ) {}
 
+      @Public()
       @Post('login')
       @HttpCode(HttpStatus.OK)
       @ApiOkResponse({
@@ -28,8 +30,9 @@ export class AuthController {
         return token;
       }
     
+      @Public()
       @Post('register')
-      @HttpCode(HttpStatus.OK)
+      @HttpCode(HttpStatus.CREATED)
       @ApiOkResponse({ type: User, description: 'Successfully Registered' })
       async userRegister(
         @Body() userRegisterDto: User,
@@ -41,7 +44,7 @@ export class AuthController {
       @Version('1')
       @Get('me')
       @HttpCode(HttpStatus.OK)
-      @Auth([RoleType.USER, RoleType.ADMIN])
+      @Auth(Action.Read,'User')
       @ApiOkResponse({ type: User, description: 'current user info' })
       getCurrentUser(@AuthUser() user: User): User {
         return user;

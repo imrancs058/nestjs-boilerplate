@@ -4,6 +4,7 @@ import {
     HttpCode,
     HttpStatus,
     Query,
+    UseGuards,
     UseInterceptors,
     ValidationPipe,
   } from '@nestjs/common';
@@ -15,6 +16,7 @@ import {
   import { RoleType } from '../../constants';
   import {User} from './user.schema'
   import { PageOptionsDto } from '../../common/dto/page-options.dto';
+import { Action } from '../../casl/userRoles';
 @Controller('user')
 @ApiTags('users')
 export class UserController {
@@ -29,7 +31,7 @@ export class UserController {
        * @returns
        */
       @Get()
-      @Auth([RoleType.USER])
+      @Auth(Action.Read,'User')
       @HttpCode(HttpStatus.OK)
       @ApiPageOkResponse({
         description: 'Get users list',
@@ -37,7 +39,8 @@ export class UserController {
       })
       getUsers(
         @Query(new ValidationPipe({ transform: true }))
-        pageOptionsDto: PageOptionsDto
+        pageOptionsDto: PageOptionsDto,
+        @AuthUser() user:User,
       ):Promise<User[]> {
         this.loggerService.log(`GET User/ ${LoggerMessages.API_CALLED}`);
         return this.userService.getUsers(pageOptionsDto);

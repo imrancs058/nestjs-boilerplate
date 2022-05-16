@@ -3,7 +3,6 @@ import type { MongooseModuleOptions } from '@nestjs/mongoose';
 @Injectable()
 export class ConfigrationService {
   get mongooseConfig(): MongooseModuleOptions {
-    let bb=process.env.MONGODB_URI;
     return {
       uri: process.env.MONGODB_URI,
     };

@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {newUser} from './helper/users';
+import {cat, logUser, newUser} from './helper/users';
 import { INestApplication } from '@nestjs/common';
 export class Helper {
 
@@ -20,6 +20,14 @@ export class Helper {
 
     public async createUser() {
         return newUser();
+    }
+
+    public async loginUser() {
+        return logUser();
+    }
+
+    public async category() {
+        return cat();
     }
 
     // public authHeaderForUser(user: User | Admin): string {
