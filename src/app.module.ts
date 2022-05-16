@@ -8,6 +8,11 @@ import { ConfigrationModule } from './configration/configration.module';
 import { ConfigrationService } from './configration/configration.service';
 import { LoggerModule } from './logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/auth.guard';
+import { CaslModule } from './casl/casl.module';
+
+
 @Module({
   imports: [UserModule, ConfigrationModule,
     ConfigModule.forRoot({
@@ -23,8 +28,10 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     LoggerModule,
     AuthModule,
+    CaslModule,
     ],
   controllers: [AppController],
   providers: [AppService],
+  exports:[AppModule]
 })
 export class AppModule {}

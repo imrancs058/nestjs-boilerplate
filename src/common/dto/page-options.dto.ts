@@ -1,6 +1,6 @@
 import { Order } from '../../constants';
 import { Transform, Type, Expose } from 'class-transformer';
-import {  IsInt,IsString, MinLength, MaxLength } from 'class-validator';
+import {  IsInt,IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
 export class PageOptionsDto {
   @Transform(value => {
     if(value.value===Order.DESC){
@@ -15,7 +15,7 @@ export class PageOptionsDto {
   })
   readonly order: 1 |-1 = 1;
 
-
+  @IsOptional()
   @IsString()
   @MinLength(2)
   @MaxLength(3)
@@ -31,7 +31,7 @@ export class PageOptionsDto {
   @Type(() => Number)
   readonly skip: number = 0;
 
-
+  @IsOptional()
   @IsString()
   readonly q?: string;
 }

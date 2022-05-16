@@ -1,33 +1,32 @@
 import type { PipeTransform } from '@nestjs/common';
 import {
   applyDecorators,
-  Param,
-  ParseUUIDPipe,
   SetMetadata,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import type { Type } from '@nestjs/common/interfaces';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../guards/auth.guard';
 
 import type { RoleType } from '../constants';
-import { AuthGuard } from '../guards/auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
 import { AuthUserInterceptor } from '../interceptors/auth-user-interceptor.service';
 import { PublicRoute } from './public-route.decorator';
+import { CheckPolicies, PoliciesGuard } from '../guards/PoliciesGuard';
+import { AppAbility, CaslAbilityFactory } from "../casl/casl-ability.factory";
+import { Action } from 'src/casl/userRoles';
 
 export function Auth(
-  roles: RoleType[] = [],
-  options?: Partial<{ public: boolean }>,
+  roles: Action,
+  options: string,
 ): MethodDecorator {
-  const isPublicRoute = options?.public;
 
   return applyDecorators(
-    SetMetadata('roles', roles),
-    UseGuards(AuthGuard({ public: isPublicRoute }), RolesGuard),
+    UseGuards(JwtAuthGuard,PoliciesGuard),
+    CheckPolicies((ability: AppAbility) => ability.can(roles, options)),
     ApiBearerAuth(),
     UseInterceptors(AuthUserInterceptor),
-    ApiUnauthorizedResponse({ description: 'Unauthorized' }),
-    PublicRoute(isPublicRoute),
+    ApiUnauthorizedResponse({ description: 'Unauthorized' }), 
   );
 }
+export const IS_PUBLIC_KEY = 'isPublic';
+export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
