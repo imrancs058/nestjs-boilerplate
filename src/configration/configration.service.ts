@@ -7,6 +7,11 @@ export class ConfigrationService {
       uri: process.env.MONGODB_URI,
     };
   }
+  get mongooseConfigLog(): MongooseModuleOptions {
+    return {
+      uri: process.env.MONGODB_URI_AUDIT,
+    };
+  }
   get authConfig() {
     return {
       privateKey: process.env.JWT_PRIVATE_KEY,
@@ -21,7 +26,7 @@ export class ConfigrationService {
 
   get appConfig() {
     return {
-      port: process.env.PORT || 3000
+      port: process.env.PORT || 3000,
     };
   }
 
@@ -39,5 +44,11 @@ export class ConfigrationService {
 
   get nodeEnv(): string {
     return process.env.NODE_ENV || 'development';
+  }
+  get primaryDBName(): string {
+    return 'primaryDB';
+  }
+  get auditLogDBName(): string {
+    return 'auditLogDB';
   }
 }

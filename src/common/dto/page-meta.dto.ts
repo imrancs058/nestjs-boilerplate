@@ -27,7 +27,6 @@ export class PageMetaDto {
   readonly hasNextPage: boolean;
 
   constructor({ pageOptionsDto, itemCount }: IPageMetaDtoParameters) {
-    
     this.take = pageOptionsDto.take;
     this.itemCount = itemCount;
     this.pageCount = Math.ceil(this.itemCount / this.take);

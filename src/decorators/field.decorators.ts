@@ -4,12 +4,6 @@ import type { ApiPropertyOptions } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
-  ArrayNotEmpty,
-  IsBoolean,
-  IsDate,
-  IsEmail,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -17,19 +11,14 @@ import {
   IsOptional,
   IsPositive,
   IsString,
-  IsUrl,
-  IsUUID,
   Max,
   MaxLength,
   Min,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
 import _ from 'lodash';
 
-import { supportedLanguageCount } from '../constants';
-
-type RequireField<T, K extends keyof T> = T & Required<Pick<T, K>>;
+// type RequireField<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 interface IStringFieldOptions {
   minLength?: number;
@@ -61,8 +50,6 @@ export function NumberField(
       ApiProperty({ type: Number, ...options, example: int ? 1 : 1.2 }),
     );
   }
-
-
 
   if (int) {
     decorators.push(IsInt({ each }));
@@ -116,8 +103,6 @@ export function StringField(
     decorators.push(MaxLength(options.maxLength));
   }
 
-
-
   return applyDecorators(...decorators);
 }
 
@@ -131,11 +116,6 @@ export function StringFieldOptional(
   );
 }
 
-
-
-
-
-
 export function EnumField<TEnum>(
   getEnum: () => TEnum,
   options: Omit<ApiPropertyOptions, 'type' | 'enum' | 'enumName'> &
@@ -147,7 +127,6 @@ export function EnumField<TEnum>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const enumValue = getEnum() as any;
   const decorators = [IsEnum(enumValue as object, { each: options.each })];
-
 
   return applyDecorators(...decorators);
 }
@@ -162,6 +141,3 @@ export function EnumFieldOptional<TEnum>(
     EnumField(getEnum, { required: false, ...options }),
   );
 }
-
-
-

@@ -3,6 +3,6 @@ import { ConfigrationService } from './configration.service';
 
 @Module({
   providers: [ConfigrationService],
-  exports:[ConfigrationService]
+  exports: [ConfigrationService],
 })
 export class ConfigrationModule {}

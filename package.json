@@ -46,6 +46,7 @@
     "nestjs-seeder": "^0.2.0",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
+    "password-hash": "^1.2.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

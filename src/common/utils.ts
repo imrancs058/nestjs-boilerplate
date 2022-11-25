@@ -1,4 +1,4 @@
-const bcrypt= require('bcrypt');
+const passwordHash = require('password-hash');
 
 import type { Optional } from '../types';
 
@@ -8,7 +8,7 @@ import type { Optional } from '../types';
  * @returns {string}
  */
 export function generateHash(password: string): string {
-  return bcrypt.hashSync(password, 10);
+  return passwordHash.generate(password);
 }
 
 /**
@@ -24,8 +24,7 @@ export function validateHash(
   if (!password || !hash) {
     return Promise.resolve(false);
   }
-
-  return bcrypt.compare(password, hash);
+  return passwordHash.verify(password, hash);
 }
 
 export function getVariableName<TResult>(getVar: () => TResult): string {
